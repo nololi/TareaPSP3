@@ -4,11 +4,10 @@ Aplicación cliente servidor para adivinar un número secreto almacenado en el s
 ## Instalación 
 Importar proyecto en IDE de Java
 
-Eclipse:
+Eclipse:  
 ![ImportaciónEclipse](../1.jpg)
 
-Netbeans:
-Importar como proyecto de eclipse
+Netbeans:  
 ![ImportaciónEclipse](../2.jpg)
 
 

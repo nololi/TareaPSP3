@@ -7,8 +7,7 @@ Importar proyecto en IDE de Java
 Eclipse:
 ![ImportaciónEclipse](../1.jpg)
 
-Netbeans:
-Importar como proyecto de eclipse
+Netbeans:  
 ![ImportaciónEclipse](../2.jpg)
 
 
