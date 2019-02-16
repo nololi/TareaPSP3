@@ -1,4 +1,4 @@
-# Envío de datos de un fichero por Sockets
+# Comunicación cliente/servidor
 Aplicación cliente servidor para adivinar un número secreto almacenado en el servidor
 
 ## Instalación 
