@@ -13,10 +13,10 @@ Importar como proyecto de eclipse
 
 
 ## Ejemplo de uso   
-Ejecutar Servidor.java y Cliente.java como aplicación de java 
-![Execute](../3.jpg)
-![Execute](../4.jpg)
-![Execute](../5.jpg)
+Ejecutar Servidor.java y Cliente.java como aplicación de java: 
+![Execute](../3.jpg)  
+![Execute](../4.jpg)  
+![Execute](../5.jpg)  
 
 
 ## Configuración de desarrollo

@@ -1,5 +1,5 @@
 # Envío de datos de un fichero por Sockets
-Aplicación cliente servidor de solicitud de datos de un fichero y entrega de los mismos
+Aplicación cliente servidor para adivinar un número secreto almacenado en el servidor
 
 ## Instalación 
 Importar proyecto en IDE de Java
@@ -14,9 +14,9 @@ Importar como proyecto de eclipse
 
 ## Ejemplo de uso   
 Ejecutar Servidor.java y Cliente.java como aplicación de java 
-![Execute](../3.jpg)
-![Execute](../4.jpg)
-![Execute](../5.jpg)
+![Execute](../3.jpg)  
+![Execute](../4.jpg)  
+![Execute](../5.jpg) 
 
 
 ## Configuración de desarrollo
