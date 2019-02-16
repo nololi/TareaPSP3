@@ -8,7 +8,7 @@ Eclipse:
 ![ImportaciónEclipse](../1.jpg)
 
 Netbeans:  
-![ImportaciónEclipse](../2.jpg)
+![ImportaciónNetbeans](../2.jpg)
 
 
 ## Ejemplo de uso   
