@@ -39,7 +39,11 @@ public class Cliente {
 				valorEntradaCliente = Integer.parseInt(entrada.readLine());
 				System.out.println("ha introducido " + valorEntradaCliente);
 				dataOutputStream.writeInt(valorEntradaCliente);
-				System.out.println(dataInputStream.readUTF());// imprimo lo que me devuelve el servidor
+				String valorDevuelto  = dataInputStream.readUTF();
+				System.out.println(valorDevuelto);// imprimo lo que me devuelve el servidor
+				if(valorDevuelto.contains("Felicidades")) {
+					break;
+				}
 			}
 
 		} catch (IOException e) {

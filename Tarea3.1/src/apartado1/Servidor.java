@@ -14,31 +14,65 @@ import java.net.SocketException;
  * @author N
  *
  */
-public class Servidor {
+public class Servidor extends Thread {
+	Socket socket;
 
-	public static void main(String[] args) {
+	static final int Puerto = 2000;
+	private static int numeroCliente=1;
+	private int miNumeroCliente;
+	private int numeroAAcertar;
 
-		Socket socket = null;
-		int numeroRecibido;
-		int numeroAAcertar = (int) (Math.random() * 100);
-		DataOutputStream dataOutputStream = null;
+	public Servidor(Socket sCliente) {
+		numeroAAcertar = (int) (Math.random() * 100);
+		socket = sCliente;
+	}
+	
+	
+	
+	public int getMiNumeroCliente() {
+		return miNumeroCliente;
+	}
+
+
+
+	public void setMiNumeroCliente(int miNumeroCliente) {
+		this.miNumeroCliente = miNumeroCliente;
+	}
+
+
+
+	public void mostrarNumero() {
+		System.out.println("El número que tiene que acertar el cliente " + numeroCliente +" es " + numeroAAcertar);
+	}
+
+	public void run() {
+		mostrarNumero();
+		// Creo los flujos de entrada y salida
 		DataInputStream dataInputStream = null;
-		System.out.println("El número que tiene que acertar es " + numeroAAcertar);
-
-		ServerSocket serverSocket = null;
 		try {
-			serverSocket = new ServerSocket(2000); // servidor en escucha puerto 2000
+			dataInputStream = new DataInputStream(socket.getInputStream());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		DataOutputStream dataOutputStream = null;
+		try {
+			dataOutputStream = new DataOutputStream(socket.getOutputStream());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 
-			socket = serverSocket.accept();// acepto la conexión con el cliente
-			System.out.println("Conexión creada correctamente");
-
-			dataOutputStream = new DataOutputStream(socket.getOutputStream());// para las salidas
-			dataInputStream = new DataInputStream(socket.getInputStream());// para las entradas
+		int numeroRecibido;	
+		
+		try {		
+			// ATENDER PETICIÓN DEL CLIENTE
+			System.out.println("Conexión creada correctamente número " + numeroCliente);
+			setMiNumeroCliente(numeroCliente);
+			numeroCliente++;
 
 			while (true) {
 				numeroRecibido = dataInputStream.readInt(); // leo el número que me ha pasado el cliente
 				if (numeroRecibido == numeroAAcertar) {
-					System.out.println("Felicidades, ha acertado el número, \nCerrando conexiones....");
+					dataOutputStream.writeUTF("Felicidades, ha acertado el número, \nCerrando conexiones....");
 					break;
 				} else {
 					dataOutputStream
@@ -46,20 +80,13 @@ public class Servidor {
 				}
 
 			}
+			// Se cierra la conexión
+			socket.close();
+			System.out.println("Cliente " + getMiNumeroCliente() +" desconectado");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 
-		} catch (IOException e) {
-			System.out.println("Error al conectarse");
 		} finally {
-			try {
-				serverSocket.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			try {
-				socket.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 			try {
 				dataInputStream.close();
 			} catch (IOException e) {
@@ -70,6 +97,41 @@ public class Servidor {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+
+	}
+
+	public static void main(String[] args) {
+
+		Socket socket = null;
+
+		ServerSocket serverSocket = null;
+		try {
+			serverSocket = new ServerSocket(Puerto); // servidor en escucha puerto 2000
+
+			while (true) {
+				socket = serverSocket.accept();// acepto la conexión con el cliente
+				new Servidor(socket).start();
+			}
+
+		} catch (IOException e) {
+			System.out.println("Error al conectarse" + e.getMessage());
+		} finally {
+			if (serverSocket != null) {
+				try {
+					serverSocket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (socket != null) {
+				try {
+					socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
 		}
 
 	}
