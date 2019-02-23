@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -15,19 +14,44 @@ import java.util.Arrays;
  * @author N
  *
  */
-public class Servidor {
+public class Servidor extends Thread {
+	Socket socket;
 
-	public Servidor() {
-		Socket socket = null;
-		ServerSocket serverSocket = null;
-		DataOutputStream dataOutputStream = null;
+	private static final int PUERTO = 1500;
+	private static int NUMERO_CLIENTE = 1;
+	private int miNumeroCliente;
+
+	public Servidor(Socket sCliente) {
+		socket = sCliente;
+	}
+
+	public int getMiNumeroCliente() {
+		return miNumeroCliente;
+	}
+
+	public void setMiNumeroCliente(int miNumeroCliente) {
+		this.miNumeroCliente = miNumeroCliente;
+	}
+
+	public void run() {
+		System.out.println("Conexión creada correctamente número " + NUMERO_CLIENTE);
+		setMiNumeroCliente(NUMERO_CLIENTE);
+		NUMERO_CLIENTE++;
 		DataInputStream dataInputStream = null;
-		File ficheroEncontrado = null;
-		
 		try {
-			serverSocket = new ServerSocket(1500);
-			System.out.println("Servidor a la espera");
-			socket = serverSocket.accept();
+			dataInputStream = new DataInputStream(socket.getInputStream());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		DataOutputStream dataOutputStream = null;
+		try {
+			dataOutputStream = new DataOutputStream(socket.getOutputStream());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		File ficheroEncontrado = null;
+		try {
 			dataOutputStream = new DataOutputStream(socket.getOutputStream());// para las salidas
 			dataInputStream = new DataInputStream(socket.getInputStream());// para las entradas
 
@@ -39,9 +63,9 @@ public class Servidor {
 			System.out.println("No se ha podido crear el serverSocket" + e.getMessage());
 			System.exit(1);
 		}
-
-		cerrarConexion(serverSocket, socket, dataOutputStream, dataInputStream);
-
+		
+		cerrarConexion(socket, dataOutputStream, dataInputStream);
+		System.out.println("Cliente " + getMiNumeroCliente() +" desconectado");
 	}
 
 	/*
@@ -96,15 +120,7 @@ public class Servidor {
 	/*
 	 * Cierre de sockets y streams
 	 */
-	public void cerrarConexion(ServerSocket c, Socket s, DataOutputStream dataOutputStream,
-			DataInputStream dataInputStream) {
-		if (c != null) {
-			try {
-				c.close();
-			} catch (IOException e) {
-				System.out.println("Error al cerrar la conexión " + e.getMessage());
-			}
-		}
+	public void cerrarConexion(Socket s, DataOutputStream dataOutputStream, DataInputStream dataInputStream) {
 		if (s != null) {
 			try {
 				s.close();
@@ -129,8 +145,36 @@ public class Servidor {
 	}
 
 	public static void main(String[] args) {
-		// creo un objeto de la clase Servidor
-		new Servidor();
+		Socket socket = null;
+
+		ServerSocket serverSocket = null;
+		try {
+			serverSocket = new ServerSocket(PUERTO); // servidor en escucha puerto 2000
+			System.out.println("Servidor a la espera");
+			while (true) {
+				socket = serverSocket.accept();// acepto la conexión con el cliente
+				new Servidor(socket).start();
+			}
+
+		} catch (IOException e) {
+			System.out.println("Error al conectarse" + e.getMessage());
+		} finally {
+			if (serverSocket != null) {
+				try {
+					serverSocket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (socket != null) {
+				try {
+					socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+		}
 
 	}
 

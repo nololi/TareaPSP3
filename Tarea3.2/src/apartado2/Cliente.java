@@ -20,7 +20,7 @@ public class Cliente {
 		DataOutputStream dataOutputStream = null;
 		BufferedReader entrada = null;
 		try {
-			cliente = new Socket("localhost", 1500);
+			cliente = new Socket("localhost",1500);
 			dataOutputStream = new DataOutputStream(cliente.getOutputStream());// para mandar al servidor
 			dataInputStream = new DataInputStream(cliente.getInputStream());// para lo que devuelve el servidor
 			entrada = new BufferedReader(new InputStreamReader(System.in)); // para la entrada del datos del usuario

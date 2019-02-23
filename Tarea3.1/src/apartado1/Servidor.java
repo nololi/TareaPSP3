@@ -17,8 +17,8 @@ import java.net.SocketException;
 public class Servidor extends Thread {
 	Socket socket;
 
-	static final int Puerto = 2000;
-	private static int numeroCliente=1;
+	private static final int PUERTO = 2000;
+	private static int NUMERO_CLIENTE=1;
 	private int miNumeroCliente;
 	private int numeroAAcertar;
 
@@ -42,7 +42,7 @@ public class Servidor extends Thread {
 
 
 	public void mostrarNumero() {
-		System.out.println("El número que tiene que acertar el cliente " + numeroCliente +" es " + numeroAAcertar);
+		System.out.println("El número que tiene que acertar el cliente " + NUMERO_CLIENTE +" es " + numeroAAcertar);
 	}
 
 	public void run() {
@@ -65,9 +65,9 @@ public class Servidor extends Thread {
 		
 		try {		
 			// ATENDER PETICIÓN DEL CLIENTE
-			System.out.println("Conexión creada correctamente número " + numeroCliente);
-			setMiNumeroCliente(numeroCliente);
-			numeroCliente++;
+			System.out.println("Conexión creada correctamente número " + NUMERO_CLIENTE);
+			setMiNumeroCliente(NUMERO_CLIENTE);
+			NUMERO_CLIENTE++;
 
 			while (true) {
 				numeroRecibido = dataInputStream.readInt(); // leo el número que me ha pasado el cliente
@@ -107,7 +107,7 @@ public class Servidor extends Thread {
 
 		ServerSocket serverSocket = null;
 		try {
-			serverSocket = new ServerSocket(Puerto); // servidor en escucha puerto 2000
+			serverSocket = new ServerSocket(PUERTO); // servidor en escucha puerto 2000
 
 			while (true) {
 				socket = serverSocket.accept();// acepto la conexión con el cliente
