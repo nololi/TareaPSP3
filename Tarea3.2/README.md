@@ -1,21 +1,20 @@
 # Envío de datos de un fichero por Sockets
-Aplicación cliente servidor de solicitud de datos de un fichero y entrega de los mismos
+Aplicación concurrente cliente servidor de solicitud de datos de un fichero y entrega de los mismos
 
 ## Instalación 
 Importar proyecto en IDE de Java
 
 Eclipse:
-![ImportaciónEclipse](../1.jpg)
+![ImportaciónEclipse](../PSP4_images/1.jpg)
 
 Netbeans:  
-![ImportaciónNetbeans](../2.jpg)
+![ImportaciónNetbeans](../PSP4_images/2.jpg)
 
 
 ## Ejemplo de uso   
-Ejecutar Servidor.java y Cliente.java como aplicación de java: 
-![Execute](../3.jpg)  
-![Execute](../4.jpg)  
-![Execute](../5.jpg)  
+Ejecutar Servidor.java y varios Cliente.java como aplicación de java: 
+![Execute](../PSP4_images/8.jpg)  
+
 
 
 ## Configuración de desarrollo

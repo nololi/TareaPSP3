@@ -1,10 +1,10 @@
-# Comunicación cliente/servidor
-Aplicación concurrente cliente servidor para adivinar un número secreto almacenado en el servidor
+# Envío de datos de un fichero por Sockets
+Aplicación concurrente cliente servidor con permiso de usuario, muestra de un directorio, y envío del contenido de un fichero
 
 ## Instalación 
 Importar proyecto en IDE de Java
 
-Eclipse:  
+Eclipse:
 ![ImportaciónEclipse](../PSP4_images/1.jpg)
 
 Netbeans:  
@@ -12,9 +12,11 @@ Netbeans:
 
 
 ## Ejemplo de uso   
-Ejecutar Servidor.java y Cliente.java como aplicación de java 
-![Execute](../PSP4_images/6.jpg)  
-  
+Ejecutar Servidor.java y varios Cliente.java como aplicación de java: 
+![Execute](../PSP4_images/3.jpg)  
+![Execute](../PSP4_images/4.jpg)  
+
+
 ## Configuración de desarrollo
 Requiere instalación de Java 8.
 
