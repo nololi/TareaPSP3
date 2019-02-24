@@ -12,7 +12,7 @@ Netbeans:
 
 
 ## Ejemplo de uso   
-Ejecutar Servidor.java y varios Cliente.java como aplicación de java: 
+Ejecutar Servidor.jar y varios Cliente.jar como: 
 ![Execute](../PSP4_images/8.jpg)  
 
 

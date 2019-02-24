@@ -12,7 +12,7 @@ Netbeans:
 
 
 ## Ejemplo de uso   
-Ejecutar Servidor.java y Cliente.java como aplicación de java 
+Ejecutar Servidor.jar y Cliente.jar:
 ![Execute](../PSP4_images/6.jpg)  
   
 ## Configuración de desarrollo
