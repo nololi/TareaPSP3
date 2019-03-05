@@ -18,6 +18,7 @@ import java.util.Arrays;
 public class Servidor {
 
 	public Servidor() {
+		//Defino sockets, streams y una variable File para el fichero solicitado:
 		Socket socket = null;
 		ServerSocket serverSocket = null;
 		DataOutputStream dataOutputStream = null;
@@ -27,20 +28,24 @@ public class Servidor {
 		try {
 			serverSocket = new ServerSocket(1500);
 			System.out.println("Servidor a la espera");
-			socket = serverSocket.accept();
-			dataOutputStream = new DataOutputStream(socket.getOutputStream());// para las salidas
-			dataInputStream = new DataInputStream(socket.getInputStream());// para las entradas
+			
+			socket = serverSocket.accept(); //cuando me llega una solicitud de conexión la acepto 
+			
+			dataOutputStream = new DataOutputStream(socket.getOutputStream());// stream para las salidas
+			dataInputStream = new DataInputStream(socket.getInputStream());// stream para las entradas
 
-			// busqueda del fichero dentro de la carpeta Servidor y envío
+			// busqueda del fichero dentro de la carpeta Servidor
 			ficheroEncontrado = buscarFichero(dataInputStream.readUTF());
+			//mandar los datos del fichero al cliente
 			mandarDatosCliente(ficheroEncontrado, dataOutputStream);
 
 		} catch (IOException e) {
 			System.out.println("No se ha podido crear el serverSocket" + e.getMessage());
 			System.exit(1);
 		}
-
+		//método para cerrar sockets y streams:
 		cerrarConexion(serverSocket, socket, dataOutputStream, dataInputStream);
+		System.out.println("Envío realizado : cerrando socket del servidor ... ");
 
 	}
 
@@ -72,19 +77,23 @@ public class Servidor {
 		if (ficheroEncontrado != null) {// si se encontró se envía
 			FileReader fileReader = null;
 			try {
-				fileReader = new FileReader(ficheroEncontrado);
+				fileReader = new FileReader(ficheroEncontrado); 
 				BufferedReader br = new BufferedReader(fileReader);
-				String linea = "";
-				while ((linea = br.readLine()) != null) {
-					dataOutputStream.writeUTF(linea);
+				
+				String datosFile = "";
+				
+				//voy enviando los datos del fichero línea a línea
+				while ((datosFile = br.readLine()) != null) {
+					dataOutputStream.writeUTF(datosFile);
 				}
-				if (br != null) {
+				
+				if (br != null) {//cierro el buffer de lectura
 					br.close();
 				}
 			} catch (IOException e) {
 				System.out.println("Error al enviar el fichero al cliente" + e.getMessage());
 			}
-		} else {
+		} else {//si no se encontró el fichero se envía un mensaje al cliente
 			try {
 				dataOutputStream.writeUTF("No se ha encontrado el fichero");
 			} catch (IOException e) {
@@ -98,28 +107,28 @@ public class Servidor {
 	 */
 	public void cerrarConexion(ServerSocket c, Socket s, DataOutputStream dataOutputStream,
 			DataInputStream dataInputStream) {
-		if (c != null) {
+		if (c != null) { //cierre socket servidor
 			try {
 				c.close();
 			} catch (IOException e) {
 				System.out.println("Error al cerrar la conexión " + e.getMessage());
 			}
 		}
-		if (s != null) {
+		if (s != null) { //cierre socket cliente
 			try {
 				s.close();
 			} catch (IOException e) {
 				System.out.println("Error al cerrar la conexión " + e.getMessage());
 			}
 		}
-		if (dataOutputStream != null) {
+		if (dataOutputStream != null) { //cierre stream salida
 			try {
 				dataOutputStream.close();
 			} catch (IOException e) {
 				System.out.println("Error al cerrar la conexión " + e.getMessage());
 			}
 		}
-		if (dataInputStream != null) {
+		if (dataInputStream != null) {//cierre stream entrada
 			try {
 				dataInputStream.close();
 			} catch (IOException e) {

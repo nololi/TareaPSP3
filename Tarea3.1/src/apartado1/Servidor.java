@@ -18,12 +18,13 @@ public class Servidor {
 
 	public static void main(String[] args) {
 
-		Socket socket = null;
-		int numeroRecibido;
-		int numeroAAcertar = (int) (Math.random() * 100);
-		DataOutputStream dataOutputStream = null;
-		DataInputStream dataInputStream = null;
-		System.out.println("El número que tiene que acertar es " + numeroAAcertar);
+		Socket socket = null;//socket cliente
+		int numeroRecibido; //numero enviado por el cliente
+		int numeroAAcertar = (int) (Math.random() * 100); //número que tiene que acertar el cliente
+		DataOutputStream dataOutputStream = null; //stream salida
+		DataInputStream dataInputStream = null;//stream entrada
+		
+		System.out.println("El número que tiene que acertar es " + numeroAAcertar); //control : para comprobar
 
 		ServerSocket serverSocket = null;
 		try {
@@ -31,25 +32,25 @@ public class Servidor {
 
 			socket = serverSocket.accept();// acepto la conexión con el cliente
 			System.out.println("Conexión creada correctamente");
-
+			
 			dataOutputStream = new DataOutputStream(socket.getOutputStream());// para las salidas
 			dataInputStream = new DataInputStream(socket.getInputStream());// para las entradas
 
 			while (true) {
 				numeroRecibido = dataInputStream.readInt(); // leo el número que me ha pasado el cliente
 				if (numeroRecibido == numeroAAcertar) {
-					System.out.println("Felicidades, ha acertado el número, \nCerrando conexiones....");
+					dataOutputStream.writeUTF("Felicidades, ¡ha acertado el número! \nCerrando conexiones....");
 					break;
 				} else {
 					dataOutputStream
-							.writeUTF(numeroRecibido < numeroAAcertar ? "El número es mayor " : " El número es menor");
+							.writeUTF(numeroRecibido < numeroAAcertar ? "El número es mayor " : "El número es menor");
 				}
 
-			}
+			}		
 
 		} catch (IOException e) {
 			System.out.println("Error al conectarse");
-		} finally {
+		} finally {//cerrando sockets y streams
 			try {
 				serverSocket.close();
 			} catch (IOException e) {
@@ -71,6 +72,8 @@ public class Servidor {
 				e.printStackTrace();
 			}
 		}
+		
+		System.out.println("Juego finalizado");
 
 	}
 

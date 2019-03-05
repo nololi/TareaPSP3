@@ -22,29 +22,38 @@ public class Cliente {
 
 	public static void main(String[] args) {
 
-		Socket clientSocket = null;
-		DataOutputStream dataOutputStream = null;
-		DataInputStream dataInputStream = null;
-		BufferedReader entrada = null;
+		Socket clientSocket = null; //socket cliente
+		DataOutputStream dataOutputStream = null; //stream salida
+		DataInputStream dataInputStream = null; //stream entrada
+		BufferedReader entrada = null; //buffer de entrada
 		int valorEntradaCliente;
 
 		try {
-			clientSocket = new Socket("localhost", 2000);// me conecto al servidor
+			clientSocket = new Socket("localhost", 2000);// me conecto al servidor con puerto 2000
 			dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());// para mandar al servidor
 			dataInputStream = new DataInputStream(clientSocket.getInputStream());// para lo que devuelve el servidor
 
-			while (true) {
+			while (true) {//mientras no acierte sigo pidiendo números
+				
 				System.out.println("Introduzca un número del 0  al 100");
-				entrada = new BufferedReader(new InputStreamReader(System.in));
-				valorEntradaCliente = Integer.parseInt(entrada.readLine());
-				System.out.println("ha introducido " + valorEntradaCliente);
-				dataOutputStream.writeInt(valorEntradaCliente);
-				System.out.println(dataInputStream.readUTF());// imprimo lo que me devuelve el servidor
+				entrada = new BufferedReader(new InputStreamReader(System.in)); //buffer para leer datos introducidos
+				
+				valorEntradaCliente = Integer.parseInt(entrada.readLine());	//leer lo que introduce el cliente
+				
+				System.out.println("Ha introducido " + valorEntradaCliente + " enviando al servidor, espere ....");
+				
+				dataOutputStream.writeInt(valorEntradaCliente);//envío el número al servidor
+				
+				String mensajeServidor = dataInputStream.readUTF();//guardo lo que recibo del servidor
+				System.out.println(mensajeServidor);// imprimo lo que me devuelve el servidor
+				if(mensajeServidor.contains("Felicidades")) {
+					break;
+				}
 			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
+		} finally {//cerrando socket y streams
 			try {
 				clientSocket.close();
 			} catch (IOException e) {
