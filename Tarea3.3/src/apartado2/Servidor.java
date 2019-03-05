@@ -25,7 +25,7 @@ public class Servidor extends Thread {
 
 	private final String usuario = "Noelia";// usuario para el login
 	private final String contra = "abc123"; // contraseña para el login
-	private int miNumeroCliente = 1;// número del cliente que se ha conectado
+	private int miNumeroCliente;// número del cliente que se ha conectado
 
 	public Servidor(Socket sCliente) {// constructor que inicializa el servidor con el socketcliente
 		socket = sCliente;
