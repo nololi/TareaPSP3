@@ -14,42 +14,45 @@ import java.net.Socket;
  */
 public class Cliente {
 
-	public Cliente() {
+	public Cliente() { // constructor cliente
 		Socket cliente = null;
 		DataInputStream dataInputStream = null;
 		DataOutputStream dataOutputStream = null;
 		BufferedReader entrada = null;
 		try {
-			cliente = new Socket("localhost", 1500);
-			dataOutputStream = new DataOutputStream(cliente.getOutputStream());// para mandar al servidor
-			dataInputStream = new DataInputStream(cliente.getInputStream());// para lo que devuelve el servidor
-			entrada = new BufferedReader(new InputStreamReader(System.in)); // para la entrada del datos del usuario
+			cliente = new Socket("localhost", 2000); // socket cliente en puerto 2000
+			dataOutputStream = new DataOutputStream(cliente.getOutputStream());// stream para mandar al servidor
+			dataInputStream = new DataInputStream(cliente.getInputStream());// stream para lo que devuelve el servidor
+			entrada = new BufferedReader(new InputStreamReader(System.in)); // buffer para la entrada del datos del
+																			// usuario
 		} catch (IOException e) {
 			System.out.println("No se ha podido crear el socket cliente" + e.getMessage());
 			System.exit(1);
 		}
 
-		// pedir usuario
-		String usuario = pedirDato(entrada, "usuario");
-		// pedir contraseña
-		String contra = pedirDato(entrada, "contraseña");
-
-		// envío y recibo el directorio
-		String serverResponse = enviarYRecibirServidor(usuario + "-" + contra, dataOutputStream, dataInputStream);
-		if (serverResponse.contains("Error")) {
-			System.out.println(serverResponse);
-		} else {
-			// Si el usuario y contraseña son correctos
-			System.out.println(serverResponse);
-			System.out.println("Introduzca nombre del fichero");
-			// pedir nombre del fichero al usuario
-			String fichero = pedirDato(entrada, "fichero");
-			// enviar nombre del fichero al servidor y tratar la respuesta
-			serverResponse = enviarYRecibirServidor(fichero, dataOutputStream, dataInputStream);
-
-			System.out.println(serverResponse == null ? "Error, ha solicitado un directorio" : serverResponse);
-
+		String serverResponse = ""; // variable para las respuestas del servidor
+		while (true) {
+			String usuario = pedirDato(entrada, "usuario");// pedir usuario
+			String contra = pedirDato(entrada, "contraseña");// pedir contraseña
+			
+			// envío y recibo el directorio
+			serverResponse = enviarYRecibirServidor(usuario + "-" + contra, dataOutputStream, dataInputStream);
+			if (!serverResponse.contains("Error")) { // si la respuesta del cliente no indica Error, continúo
+				System.out.println(serverResponse);
+				break;
+			}
+			
+			System.out.println(serverResponse); // muestro el mensaje de error
 		}
+
+		// Si el usuario y contraseña son correctos pido el nombre del fichero
+		System.out.println("Introduzca nombre del fichero");
+		String fichero = pedirDato(entrada, "fichero");
+		
+		// enviar nombre del fichero al servidor y tratar la respuesta
+		serverResponse = enviarYRecibirServidor(fichero, dataOutputStream, dataInputStream);
+		System.out.println(serverResponse==null ?"" : serverResponse); //muestro contenido fichero si no es null
+		
 		// cerrar las conexiones, streams...
 		cerrarConexion(cliente, dataOutputStream, dataInputStream);
 	}
@@ -79,8 +82,9 @@ public class Cliente {
 	 */
 	public String enviarYRecibirServidor(String fichero, DataOutputStream dataOutputStream,
 			DataInputStream dataInputStream) {
+		// enviar datos
 		try {
-			dataOutputStream.writeUTF(fichero);// enviar datos
+			dataOutputStream.writeUTF(fichero);
 		} catch (IOException e1) {
 			System.out.println("Error al enviar al servidor" + e1.getMessage());
 		}
@@ -89,13 +93,15 @@ public class Cliente {
 			// recibir datos
 			return dataInputStream.readUTF();
 		} catch (IOException e) {
-			System.out.println("Error al recibir del servidor" + (e.getMessage() == null ? "" : e.getMessage()));
+			// si el servidor devuelve null es posible que haya solicitado un directorio
+			System.out.println("Error al recibir del servidor :"
+					+ (e.getMessage() == null ? " Error, ¿ha solicitado un directorio?" : e.getMessage()));
 		}
 		return null;
 	}
 
 	/*
-	 * Con este método cerramos buffers y el socket
+	 * Con este método cerramos streams y el socket
 	 */
 	public void cerrarConexion(Socket c, DataOutputStream dataOutputStream, DataInputStream dataInputStream) {
 		if (c != null) {
